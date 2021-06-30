@@ -68,6 +68,14 @@ class Main {
          this.stockData = await axios.get("https://script.google.com/macros/s/AKfycbzICkKzo3B5_LJy14CjAwcBtHxe1CmsuHUr9wWtA5RGU9Lchf6Ae2XC9Cnxr_i5RM1a/exec?func=all")   
          //console.log(this.stockData.data[0]);
 
+         this.tb_stock?.parentElement.removeChild(this.tb_stock);
+         document.removeChild(this.tb_stock);
+         document.removeChild(document.querySelector("#tb_stock"));
+
+         this.tb_stock = document.createElement("table");
+         this.tb_stock.id = "tb_stock";
+         document.appendChild(this.tb_stock);
+
 
             const json = JSON.stringify(this.stockData.data);
             //const json = "[{\"id\":1,\"name\":\"Jay\",\"email\":\"Jay@gmail.com\",\"password\":\"123456\"},{\"id\":2,\"name\":\"Briton\",\"email\":\"Briton@gmail.com\",\"password\":\"123456\"},{\"id\":4,\"name\":\"Tony\",\"email\":\"Tony@gmail.com\",\"password\":\"123456\"}]"
