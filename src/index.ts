@@ -30,6 +30,7 @@ class Main {
         // this.tb_stock.insertRow(5);
         
         this.createTable();
+        this.testFetch();
         //console.log(this.tb_stock);
         // axios.get(
         //    // "https://script.google.com/macros/s/AKfycbxobPB2XepflkBHcK7aV3P5-phYA8MrOCQHRL_HYmgDQqX5OF73KFu61tYv1CB6dnqu/exec?name=louis&age=30",
@@ -63,11 +64,91 @@ class Main {
 
         
     }
+    async testFetch(){
 
+        
+        // fetch('http://www.example.org/example.txt', {
+        //     credentials: 'include'
+        //  }).then(res=>res.text())
+        //  .then(console.log)
+
+        // fetch('https://httpbin.org/get')
+        // .then(res=>res.text())
+        // .then(console.log)
+
+        // const fetches = (...args) => {
+        //     const req = (method, headers, body, url) => new Promise((resolve, reject) => {
+        //       const XHR = new XMLHttpRequest();
+        //       XHR.open(method, url);
+        //       Object.keys(headers).forEach(k => XHR.setRequestHeader(k, headers[k]));
+        //       XHR.addEventListener('load', () => resolve(new Response(XHR.response)));
+        //       XHR.addEventListener('error', reject)
+        //       XHR.send(body);
+        //     })
+        //     const method = args[1] && args[1].method ? args[1].method : 'GET';
+        //     const headers = args[1] && args[1].headers ? args[1].headers : {};
+        //     const body = args[1] ? args[1].body : undefined;
+        //     const url = args[0];
+        //     return req(method, headers, body, url);
+        //   }
+          
+        //   fetches('https://httpbin.org/get',{
+        //     method:'GET',
+        //     headers: {
+        //         'author': '@realdennis'
+        //     }
+        //    })
+        //   .then(res=>res.text())
+        //   .then(console.log)
+
+        //-------------------
+
+        // const cors = 'https://cors-anywhere.herokuapp.com/'; // use cors-anywhere to fetch api data
+        // const url = 'https://www.twse.com.tw/exchangeReport/MI_INDEX?response=csv&date=20210526&type=MS'; // origin api url
+
+        // /** fetch api url by cors-anywhere */
+        // axios.get(`${cors}${url}`)
+        // .then((response) => {
+        // const msg = response.data;
+        // document.body.innerHTML = JSON.stringify(msg)
+        // },
+        // (error) => {
+        // }
+        // );
+        // ---------------測試
+        // fetch('https://httpbin.org/get')
+        // .then(res=>res.text())
+        // .then(console.log)
+        //--------代理抓fetch可用------------
+        // const cors = 'https://cors-anywhere.herokuapp.com/'; // use cors-anywhere to fetch api data
+        // const url = 'https://www.twse.com.tw/exchangeReport/MI_INDEX?response=json&date=20210526&type=ALL'; // origin api url
+
+        // let res = await fetch(`${cors}${url}`);
+        // let text = await res.json();
+        // console.log(text);
+    }
     async createTable(){
-         this.stockData = await axios.get("https://script.google.com/macros/s/AKfycbzICkKzo3B5_LJy14CjAwcBtHxe1CmsuHUr9wWtA5RGU9Lchf6Ae2XC9Cnxr_i5RM1a/exec?func=all")   
-         //console.log(this.stockData.data[0]);
+         this.stockData = await axios.get("https://script.google.com/macros/s/AKfycbxwGRhJOqessjJUKJpsLLUA5nAmQ5UzPlTof_PWOg8T0Sph70nEikY6n6_42iPKy4kK/exec?func=all") 
+         let loading = document.getElementById("lds-container");
+         //loading.classList.remove("container-roller");
+         document.body.removeChild(loading);
+         let listRow = 50;
 
+         //console.log(this.stockData.data[0]);
+         const twTitle = {
+            closingPrice: "收盤價",
+            high: "當日最高價",
+            low: "當日最低價",
+            openPrice: "開盤價",
+            changeRange: "價差",
+            date: "日期",
+            foreignInvestors: "外資買賣超",
+            investmentTrust: "投信買賣超",
+            stockId: "代號",
+            stockName: "股票名稱",
+            volume: "成交量",
+            yesterdayClose: "昨日收盤價",
+        }
 
             const json = JSON.stringify(this.stockData.data);
             //const json = "[{\"id\":1,\"name\":\"Jay\",\"email\":\"Jay@gmail.com\",\"password\":\"123456\"},{\"id\":2,\"name\":\"Briton\",\"email\":\"Briton@gmail.com\",\"password\":\"123456\"},{\"id\":4,\"name\":\"Tony\",\"email\":\"Tony@gmail.com\",\"password\":\"123456\"}]"
@@ -90,22 +171,23 @@ class Main {
             Object.keys(obj).forEach(function(key){
                 
                 let headerCell = document.createElement("TH");    
-                headerCell.innerHTML = `${key}`      
+                headerCell.innerHTML = `${twTitle[key]}`      
                 row.appendChild(headerCell);  
             });  
         
             let dvTable = document.getElementById("tb_stock");
             //dvTable.appendChild(table);
+            //document.body.removeChild(dvTable);
+            // let table = document.createElement("table");
+            // table.innerHTML = "這是採用table物件裡面的函式建立的" ;
+            // this.stockData.data.length
 
-
-
-
-            for(let k = 0 ; k <= this.stockData.data.length; k++){
+            for(let k = 0 ; k <= 30; k++){
                 this.tb_stock.insertRow(k + 1);
             }
             console.log(this.stockData.data.length);
 
-            const rowset = new Array(this.stockData.data.length + 1).fill(null).map((v, i) => this.tb_stock.rows.item(i))
+            const rowset = new Array(this.stockData.data.length + 1).fill(null).map((v,i) => this.tb_stock.rows.item(i))
             //this.tb_stock.insertRow(0);
             // let rows = this.tb_stock.rows.item(0);
             // let rows1 = this.tb_stock.rows.item(1);
@@ -119,13 +201,26 @@ class Main {
             //rows1.insertCell(-1).innerHTML = "12345";
 
             // Object.values(this.stockData.data).reduce(pre,v)=>{
-            console.log(rowset[1]);     
+            console.log(rowset);     
+            //
 
+            let div_pages = document.getElementById("div_pages")
+            
+            for( let i = 1; i < Math.ceil(this.stockData.data.length / listRow); i++){
+                let listBtn = document.createElement("button");  
+                listBtn.innerHTML = `${i}`;      
+                listBtn.id =`button${i}`;
+                listBtn.className ="btnstyle";            
+                div_pages.appendChild(listBtn);        
+                
+            }
+            
+            div_pages.addEventListener("click", (event) => console.log((event.target as HTMLElement).id)); 
+           
+        
+                 
 
-
-
-
-            for(let j = 0; j < 5; j++){
+            for(let j = 0; j < this.stockData.data.length; j++){
                 
                 let obj = this.stockData.data[j];    
                 // if(j === 0){
@@ -136,14 +231,15 @@ class Main {
 
                 Object.keys(obj).forEach(function(key){
                     rowset[j + 1].insertCell(-1).innerHTML = `${obj[key]}`
-                    console.log(key,obj[key]);
+                    // 看資料結果用
+                    // console.log(key,obj[key]);
                
                });
                 //rowset[j].insertCell(-1).innerHTML = `${this.stockData.data[0]}`
             }
 
             // }
-            
+          
             // Object.values(this.stockData.data).map((v:stock, i)=> {
             
             //         for(let j = 0; j < 3; j++){
